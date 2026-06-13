@@ -1,49 +1,131 @@
-# Proyecto Examen Final - Módulo 3
+# Proyecto Examen Final - Modulo 3 (CAG Lab)
 
-Proyecto base para la evaluación práctica del módulo 3. Los requisitos oficiales están en `Enunciado en la serie II de la evaluación final`.
+Asistente tipo chatbot con recuperacion de conocimiento del curso y contexto persistente por usuario (CAG).
 
-## Inicio rápido
+## Estado actual
 
-1. Abra la carpeta `ProyectoExamen`.
-2. Ejecute las pruebas base.
-3. Levante el backend.
-4. Abra el frontend para revisar el estado inicial.
+El proyecto ya incluye:
+
+- Backend HTTP en Python con endpoints de salud, preguntas y contexto.
+- Recuperacion de snippets desde `data/knowledge_base.json`.
+- CAG funcional con memoria por usuario en `ContextStore` (en memoria).
+- Frontend web estatico que muestra:
+  - respuesta principal en texto natural,
+  - detalles tecnicos opcionales,
+  - panel de "Contexto del usuario".
 
 ## Estructura
 
 | Ruta | Contenido |
 |---|---|
-| `backend/` | Código del servidor y lógica base del asistente. |
-| `frontend/` | Interfaz web estática para interactuar con el backend. |
-| `data/` | Base de conocimiento inicial del proyecto. |
-| `tests/base/` | Pruebas base que deben pasar desde el inicio. |
-| `tests/validation/` | Pruebas de validación de la entrega final. |
-| `docs/` | Espacio para documentación técnica y evidencias del estudiante. |
+| `backend/` | Servidor, asistente, recuperacion de conocimiento y CAG. |
+| `frontend/` | Interfaz web estatica (HTML/CSS/JS). |
+| `data/` | Base de conocimiento del curso. |
+| `tests/base/` | Pruebas base del API. |
+| `tests/validation/` | Pruebas de contrato CAG. |
+| `scripts/` | Scripts para ejecucion de pruebas. |
+| `docs/` | Evidencias y documentacion del estudiante. |
 
-## Ejecutar pruebas base
+## API disponible
 
-```bash
-./scripts/run_base_tests.sh
+### `GET /health`
+Verifica que el backend este activo.
+
+Respuesta esperada:
+
+```json
+{ "status": "ok" }
 ```
 
-Estas pruebas validan que el proyecto inicial funciona correctamente.
+### `POST /api/ask`
+Realiza una pregunta al asistente.
 
-## Ejecutar backend
+Body de ejemplo:
 
-```bash
-PYTHONPATH=. python3 -m backend.server
+```json
+{
+  "user_id": "student-01",
+  "question": "Que es CAG?"
+}
 ```
 
-El backend queda disponible en `http://127.0.0.1:8000`.
+Respuesta de ejemplo:
 
-## Abrir frontend
+```json
+{
+  "user_id": "student-01",
+  "answer": "Segun la base de conocimiento del curso: ...",
+  "sources": ["cag"],
+  "context_used": ["audience"]
+}
+```
 
-Abra `frontend/index.html` en un navegador. También puede servir la carpeta con un servidor estático local si lo prefiere.
+### `POST /api/context`
+Guarda contexto persistente para un usuario.
 
-## Validación final
+Body de ejemplo:
+
+```json
+{
+  "user_id": "student-01",
+  "key": "audience",
+  "value": "explicar como principiante"
+}
+```
+
+### `GET /api/context?user_id=student-01`
+Obtiene el contexto guardado del usuario.
+
+## Ejecucion local
+
+### 1) Levantar backend
+
+```bash
+PYTHONPATH=. python -m backend.server
+```
+
+Backend disponible en `http://127.0.0.1:8000`.
+
+### 2) Levantar frontend
+
+```bash
+python -m http.server 5501 --directory frontend
+```
+
+Frontend disponible en `http://127.0.0.1:5501/index.html`.
+
+## Pruebas
+
+### Pruebas base
+
+```bash
+python -m unittest discover -s tests/base -p "test_*.py"
+```
+
+### Pruebas de validacion CAG
+
+```bash
+python -m unittest discover -s tests/validation -p "test_*.py"
+```
+
+### Script de validacion global
 
 ```bash
 ./test.sh
 ```
 
-En el proyecto base, la validación final está destinada a fallar. Debe utilizarse como autoevaluación cuando el trabajo solicitado en el enunciado esté completo.
+## Flujo manual rapido
+
+1. Abrir el frontend.
+2. Mantener `user_id` (por ejemplo `student-01`) y hacer una pregunta.
+3. Revisar la respuesta en texto natural.
+4. Revisar el panel "Contexto del usuario":
+   - contexto guardado,
+   - claves usadas en la ultima respuesta.
+5. Hacer una segunda pregunta para comprobar continuidad contextual.
+
+## Nota sobre CAG en este proyecto
+
+- El contexto se guarda por `user_id` y se reutiliza entre preguntas.
+- La respuesta principal se mantiene limpia para usuario final.
+- Los detalles tecnicos se muestran de forma opcional en el frontend.
