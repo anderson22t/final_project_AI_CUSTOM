@@ -47,7 +47,7 @@ class ExamRequestHandler(BaseHTTPRequestHandler):
                 self._send_json(400, {"error": "user_id and question are required"})
                 return
 
-            self._send_json(200, answer_question(user_id, question))
+            self._send_json(200, answer_question(user_id, question, context_store=context_store))
             return
 
         if parsed.path == "/api/context":
@@ -76,7 +76,10 @@ class ExamRequestHandler(BaseHTTPRequestHandler):
         if length == 0:
             return {}
         raw_body = self.rfile.read(length).decode("utf-8")
-        return json.loads(raw_body)
+        try:
+            return json.loads(raw_body)
+        except json.JSONDecodeError:
+            return {}
 
     def _send_json(self, status_code, payload):
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
