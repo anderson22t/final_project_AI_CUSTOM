@@ -120,6 +120,61 @@ pre {
   padding: 16px;
 }
 
+.answer-text {
+  margin-top: 12px;
+  color: #24313d;
+  background: #161b2210;
+  border-radius: 18px;
+  padding: 16px;
+  line-height: 1.55;
+}
+
+.tech-details {
+  margin-top: 14px;
+}
+
+.tech-details summary {
+  cursor: pointer;
+  color: var(--accent-dark);
+  font-family: "Courier New", monospace;
+  font-weight: 700;
+}
+
+.context-box {
+  margin-top: 12px;
+  color: #24313d;
+  background: #161b2210;
+  border-radius: 18px;
+  padding: 16px;
+}
+
+.context-user {
+  margin: 0;
+  font-family: "Courier New", monospace;
+  font-size: 0.92rem;
+}
+
+.context-list {
+  margin: 12px 0;
+  padding-left: 18px;
+}
+
+.context-list li {
+  margin: 6px 0;
+  line-height: 1.35;
+}
+
+.empty-state {
+  color: var(--muted);
+}
+
+.context-used {
+  margin: 0;
+  font-family: "Courier New", monospace;
+  font-size: 0.9rem;
+  color: var(--accent-dark);
+}
+
 .response-card {
   margin-top: 20px;
 }

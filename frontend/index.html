@@ -27,15 +27,25 @@
 
         <aside class="card context-card">
           <p class="panel-label">Panel CAG</p>
-          <h2>Contexto pendiente</h2>
-          <p>Este panel es un punto de partida. Debe mostrar contexto guardado cuando implementes <code>/api/context</code>.</p>
-          <pre id="context-output">Sin contexto cargado.</pre>
+          <h2>Contexto del usuario</h2>
+          <p>Memoria persistente del usuario activo. Este contexto se reutiliza para influir en respuestas futuras.</p>
+          <div class="context-box">
+            <p class="context-user">Usuario activo: <code id="context-user-id">student-01</code></p>
+            <ul id="context-list" class="context-list">
+              <li class="empty-state">Sin contexto guardado.</li>
+            </ul>
+            <p id="context-used" class="context-used">Usado en esta respuesta: ninguno.</p>
+          </div>
         </aside>
       </section>
 
       <section class="card response-card">
         <p class="panel-label">Respuesta</p>
-        <pre id="answer-output">Todavia no hiciste una pregunta.</pre>
+        <div id="answer-output" class="answer-text">Todavia no hiciste una pregunta.</div>
+        <details id="answer-details" class="tech-details" hidden>
+          <summary>Ver detalles tecnicos</summary>
+          <pre id="answer-meta-output"></pre>
+        </details>
       </section>
     </main>
 
