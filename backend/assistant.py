@@ -19,6 +19,11 @@ def answer_question(user_id, question, context_store=None):
 
     answer, context_used = apply_context(user_id, question, base_answer, context_items)
 
+    if context_store is not None:
+        context_store.save(user_id, "last_question", question)
+        if sources:
+            context_store.save(user_id, "last_topic", sources[0])
+
     return {
         "user_id": user_id,
         "answer": answer,

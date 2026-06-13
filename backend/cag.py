@@ -24,11 +24,12 @@ def apply_context(user_id, question, base_answer, context_items):
             hints.append(f"Explica para esta audiencia: {value}.")
         elif key == "preferred_style":
             hints.append(f"Usa este estilo de respuesta: {value}.")
-        else:
-            hints.append(f"Contexto adicional ({key}): {value}.")
 
     if not context_used:
         return base_answer, []
+
+    if not hints:
+        return base_answer, context_used
 
     enriched_answer = f"{base_answer} {' '.join(hints)}"
     return enriched_answer, context_used
